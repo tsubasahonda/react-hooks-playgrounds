@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+const Sub = (props) => {
+  const {
+    count,
+    hello
+  } = props;
+
+  useEffect(() => {
+    console.log('subscribe', count);
+    console.log('---------------');
+
+    return () => {
+      console.log('unsubscribe', count);
+    }
+  }, [hello, count]);
+
+  return (
+    <div>
+      {count}
+    </div>
+  );
 }
 
-export default App;
+export default () => {
+  const [a, b] = useState(0);
+  const [_a, _b] = useState('!');
+
+  return (
+    <div>
+      <Sub count={a} hello={_a}/>
+      <button onClick={() => { b(a + 1); }}>
+        \ovo/ {"<"} {a}times!
+      </button>
+      <button onClick={() => { _b(`${_a}!`)}}>
+        \omo/ {"<"} hello{_a}
+      </button>
+    </div>
+  )
+}
