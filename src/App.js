@@ -1,41 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import './App.css';
 
-const Sub = (props) => {
-  const {
-    count,
-    hello
-  } = props;
+const context = createContext();
+const { Provider } = context;
 
-  useEffect(() => {
-    console.log('subscribe', count);
-    console.log('---------------');
-
-    return () => {
-      console.log('unsubscribe', count);
-    }
-  }, [hello, count]);
-
+const Child = () => {
+  const count = useContext(context);
   return (
     <div>
-      {count}
+      <span>{ count.count }</span>
+      <button onClick={count.increment}>+</button>
+      <button onClick={count.decrement}>-</button>
     </div>
   );
-}
+};
 
 export default () => {
-  const [a, b] = useState(0);
-  const [_a, _b] = useState('!');
+  const [count, setCount] = useState(0);
 
   return (
-    <div>
-      <Sub count={a} hello={_a}/>
-      <button onClick={() => { b(a + 1); }}>
-        \ovo/ {"<"} {a}times!
-      </button>
-      <button onClick={() => { _b(`${_a}!`)}}>
-        \omo/ {"<"} hello{_a}
-      </button>
-    </div>
+    <Provider
+      value={{
+        count,
+        increment: () => setCount(count + 1),
+        decrement: () => setCount(count - 1)
+      }}
+    >
+      <Child />
+    </Provider>
   )
 }
